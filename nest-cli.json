@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true
+  },
+  "projects": {
+    "nest-grammy": {
+      "type": "library",
+      "root": "libs/nest-grammy",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-grammy/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-grammy/tsconfig.lib.json"
+      }
+    }
+  }
+}
