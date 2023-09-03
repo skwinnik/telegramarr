@@ -15,6 +15,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/nest-grammy/tsconfig.lib.json"
       }
+    },
+    "radarr-client": {
+      "type": "library",
+      "root": "libs/radarr-client",
+      "entryFile": "index",
+      "sourceRoot": "libs/radarr-client/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/radarr-client/tsconfig.lib.json"
+      }
     }
   }
 }

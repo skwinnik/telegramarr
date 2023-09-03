@@ -2,9 +2,9 @@ import { NestGrammyModule } from '@app/nest-grammy';
 import { Module } from '@nestjs/common';
 
 import { ConfigModule } from './config/config.module';
-import { MainModule } from './main/main.module';
 
 import { APP_CONFIG, IConfig } from '@/config/types';
+import { MovieModule } from '@/movie/movie.module';
 
 @Module({
   imports: [
@@ -19,7 +19,8 @@ import { APP_CONFIG, IConfig } from '@/config/types';
         };
       },
     }),
-    MainModule,
+
+    MovieModule,
   ],
 })
 export class AppModule {}

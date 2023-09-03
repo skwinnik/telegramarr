@@ -1,3 +1,5 @@
+import { CallbackQuery } from '@app/nest-grammy';
+import { Command } from '@app/nest-grammy/decorators/command.decorator';
 import {
   INestGrammyModuleConfig,
   MODULE_OPTIONS_TOKEN,
@@ -10,7 +12,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Bot } from 'grammy';
+import { Bot, BotError, Context } from 'grammy';
 
 import { LocatorService } from './locator.service';
 import { On } from '../decorators/on.decorator';
@@ -32,6 +34,10 @@ export class ListenerService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     this.registerControllers();
     this.logger.log(`Bot started: ${this.config.botName}`);
+    this.bot.catch((error: BotError) => {
+      this.logger.error(error.message, error.stack);
+      this.config.errorHandler?.(error);
+    });
     this.bot.start().catch((error: Error) => {
       this.logger.error(error.message, error.stack);
     });
@@ -66,18 +72,40 @@ export class ListenerService implements OnModuleInit, OnModuleDestroy {
       const property = prototype[propertyName];
       const isFunction = typeof property === 'function';
       const hasOnMetadata = !!this.reflector.get(On, property);
+      const hasCallbackQueryMetadata = !!this.reflector.get(
+        CallbackQuery,
+        property,
+      );
+      const hasCommandMetadata = !!this.reflector.get(Command, property);
 
-      if (isFunction && hasOnMetadata) {
-        this.registerAction(controller, property);
+      if (!isFunction) continue;
+
+      if (hasOnMetadata) {
+        this.registerOn(controller, property);
+      }
+
+      if (hasCallbackQueryMetadata) {
+        this.registerCallbackQuery(controller, property);
+      }
+
+      if (hasCommandMetadata) {
+        this.registerCommand(controller, property);
       }
     }
   }
 
-  private registerAction(controller: unknown, actionFn: () => unknown) {
+  private registerOn(controller: unknown, actionFn: () => unknown) {
     const filterQueries = this.reflector.get(On, actionFn);
-    if (!filterQueries) {
-      throw new Error('Filter queries are not defined');
-    }
     this.bot.on(filterQueries, actionFn.bind(controller));
+  }
+
+  private registerCallbackQuery(controller: unknown, actionFn: () => unknown) {
+    const filterQuery = this.reflector.get(CallbackQuery, actionFn);
+    this.bot.callbackQuery(filterQuery, actionFn.bind(controller));
+  }
+
+  private registerCommand(controller: unknown, actionFn: () => unknown) {
+    const command = this.reflector.get(Command, actionFn);
+    this.bot.command(command, actionFn.bind(controller));
   }
 }

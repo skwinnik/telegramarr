@@ -73,7 +73,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/nest-grammy(|/.*)$": "<rootDir>/libs/nest-grammy/src/$1"
+      "^@app/nest-grammy(|/.*)$": "<rootDir>/libs/nest-grammy/src/$1",
+      "^@app/radarr-client(|/.*)$": "<rootDir>/libs/radarr-client/src/$1"
     }
   }
 }

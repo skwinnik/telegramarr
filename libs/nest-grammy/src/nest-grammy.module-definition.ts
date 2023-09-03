@@ -1,4 +1,5 @@
 import { ConfigurableModuleBuilder } from '@nestjs/common';
+import { Context, ErrorHandler } from 'grammy';
 
 export interface INestGrammyModuleConfig {
   /**
@@ -10,6 +11,11 @@ export interface INestGrammyModuleConfig {
    * The token of the bot
    */
   token: string;
+
+  /**
+   * Error handler
+   */
+  errorHandler?: ErrorHandler;
 }
 
 export const { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } =

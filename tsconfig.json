@@ -26,6 +26,12 @@
       ],
       "@app/nest-grammy/*": [
         "libs/nest-grammy/src/*"
+      ],
+      "@app/radarr-client": [
+        "libs/radarr-client/src"
+      ],
+      "@app/radarr-client/*": [
+        "libs/radarr-client/src/*"
       ]
     }
   }
