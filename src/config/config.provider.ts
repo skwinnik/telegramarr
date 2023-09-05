@@ -30,7 +30,6 @@ export class ConfigFactory {
     } as IConfig;
 
     ConfigFactory.Logger.log(JSON.stringify(config, null, 2));
-    ConfigFactory.Logger.log(configService.get('radarr.qualityProfileId'));
 
     return config;
   }
