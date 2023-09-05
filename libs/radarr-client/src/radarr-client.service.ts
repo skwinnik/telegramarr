@@ -48,8 +48,6 @@ export class RadarrClientService {
   }
 
   private async _post<T>(url: string, init?: RequestInit) {
-    this.logger.log(url);
-
     const response = await fetch(new URL(this.config.baseUrl + url), {
       headers: {
         'X-Api-Key': this.config.apiKey,
