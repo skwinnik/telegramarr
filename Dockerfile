@@ -1,7 +1,7 @@
 # Base image
 FROM node:20.5.1-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
