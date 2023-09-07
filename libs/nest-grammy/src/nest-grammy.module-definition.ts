@@ -1,5 +1,5 @@
 import { ConfigurableModuleBuilder } from '@nestjs/common';
-import { Context, ErrorHandler } from 'grammy';
+import { ErrorHandler } from 'grammy';
 
 export interface INestGrammyModuleConfig {
   /**

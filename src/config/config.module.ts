@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import {
   ConfigModule as NestConfigModule,
   ConfigService,
@@ -9,6 +9,7 @@ import { APP_CONFIG } from './types';
 import { ConfigFactory } from '@/config/config.provider';
 import YamlLoader from '@/config/yaml.loader';
 
+@Global()
 @Module({
   imports: [
     NestConfigModule.forRoot({

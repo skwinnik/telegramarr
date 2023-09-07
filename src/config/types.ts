@@ -1,4 +1,7 @@
 export interface IConfig {
+  access: {
+    allowedUserNames: string[];
+  };
   telegram: {
     token: string;
   };

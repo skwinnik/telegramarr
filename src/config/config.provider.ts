@@ -8,6 +8,11 @@ export class ConfigFactory {
 
   public static get(configService: ConfigService): IConfig {
     const config = {
+      access: {
+        allowedUserNames:
+          configService.get<string>('ACCESS_ALLOWED_USER_NAMES')?.split(',') ||
+          configService.get<string[]>('access.allowedUserNames'),
+      },
       telegram: {
         token:
           configService.get<string>('TELEGRAM_BOT_TOKEN') ||
