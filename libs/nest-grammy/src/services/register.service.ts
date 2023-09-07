@@ -1,21 +1,14 @@
-import {
-  CallbackQuery,
-  Command,
-  On,
-  UseGuards,
-  CanActivate,
-} from '@app/nest-grammy';
-import { UseGuardsOptions } from '@app/nest-grammy/decorators/guards/use-guards.decorator';
+import { CallbackQuery, Command, On } from '@app/nest-grammy';
 import {
   INestGrammyModuleConfig,
   MODULE_OPTIONS_TOKEN,
 } from '@app/nest-grammy/nest-grammy.module-definition';
 import { BOT_INSTANCE } from '@app/nest-grammy/providers/bot.provider';
+import { GuardsService } from '@app/nest-grammy/services/guards.service';
 import { LocatorService } from '@app/nest-grammy/services/locator.service';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Controller } from '@nestjs/common/interfaces';
-import { ModuleRef, Reflector } from '@nestjs/core';
-import { Bot, Context, NextFunction } from 'grammy';
+import { Reflector } from '@nestjs/core';
+import { Bot } from 'grammy';
 
 @Injectable()
 export class RegisterService {
@@ -28,7 +21,7 @@ export class RegisterService {
     private readonly bot: Bot,
     private readonly locatorService: LocatorService,
     private readonly reflector: Reflector,
-    private readonly moduleRef: ModuleRef,
+    private readonly guardsService: GuardsService,
   ) {}
 
   public async register() {
@@ -81,8 +74,12 @@ export class RegisterService {
     actionFn: (...args: unknown[]) => unknown,
   ) {
     const filterQueries = this.reflector.get(On, actionFn);
-    const checkAccess = await this.getCheckAccessFn(controller, actionFn);
-    this.bot.on(filterQueries, checkAccess, actionFn.bind(controller));
+    const canActivate = await this.guardsService.getCanActivateFn(
+      controller,
+      actionFn,
+    );
+
+    this.bot.on(filterQueries, canActivate, actionFn.bind(controller));
   }
 
   private async registerCallbackQuery(
@@ -90,8 +87,12 @@ export class RegisterService {
     actionFn: (...args: unknown[]) => unknown,
   ) {
     const filterQuery = this.reflector.get(CallbackQuery, actionFn);
-    const checkAccess = await this.getCheckAccessFn(controller, actionFn);
-    this.bot.callbackQuery(filterQuery, checkAccess, actionFn.bind(controller));
+    const canActivate = await this.guardsService.getCanActivateFn(
+      controller,
+      actionFn,
+    );
+
+    this.bot.callbackQuery(filterQuery, canActivate, actionFn.bind(controller));
   }
 
   private async registerCommand(
@@ -99,52 +100,11 @@ export class RegisterService {
     actionFn: (...args: unknown[]) => unknown,
   ) {
     const command = this.reflector.get(Command, actionFn);
-    const checkAccess = await this.getCheckAccessFn(controller, actionFn);
-    this.bot.command(command, checkAccess, actionFn.bind(controller));
-  }
+    const canActivate = await this.guardsService.getCanActivateFn(
+      controller,
+      actionFn,
+    );
 
-  private async getCheckAccessFn(
-    controller: unknown,
-    action: (...args: unknown[]) => unknown,
-  ): Promise<(ctx: Context, next: NextFunction) => Promise<unknown>> {
-    const controllerPrototype = Object.getPrototypeOf(controller);
-    if (!controllerPrototype) {
-      throw new Error('Controller prototype is undefined');
-    }
-
-    const controllerGuards =
-      this.reflector.get(UseGuards, controllerPrototype.constructor) || [];
-    const actionGuards = this.reflector.get(UseGuards, action) || [];
-
-    const instantiatedGuards = [
-      ...(await this.instantiateGuards(controllerGuards)),
-      ...(await this.instantiateGuards(actionGuards)),
-    ];
-
-    return async (ctx: Context, next: NextFunction) => {
-      const canActivate = await Promise.all(
-        instantiatedGuards.map((guard) => guard.canActivate(ctx)),
-      );
-
-      if (canActivate.some((value) => !value)) {
-        throw new Error('Unauthorized');
-      }
-
-      await next();
-    };
-  }
-
-  private async instantiateGuards(guards: UseGuardsOptions) {
-    const instances: CanActivate[] = [];
-    for (const guard of guards) {
-      if ('canActivate' in guard) {
-        instances.push(guard);
-        continue;
-      }
-      const instance = await this.moduleRef.create(guard);
-      instances.push(instance);
-    }
-
-    return instances;
+    this.bot.command(command, canActivate, actionFn.bind(controller));
   }
 }

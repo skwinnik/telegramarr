@@ -11,7 +11,7 @@ import {
   OnModuleDestroy,
   Logger,
 } from '@nestjs/common';
-import { Bot, BotError } from 'grammy';
+import { Bot } from 'grammy';
 
 @Injectable()
 export class ListenerService implements OnModuleInit, OnModuleDestroy {
@@ -28,10 +28,6 @@ export class ListenerService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     await this.registerService.register();
     this.logger.log(`Bot started: ${this.config.botName}`);
-    this.bot.catch((error: BotError) => {
-      this.logger.error(error.message, error.stack);
-      this.config.errorHandler?.(error);
-    });
     this.bot.start().catch((error: Error) => {
       this.logger.error(error.message, error.stack);
     });
