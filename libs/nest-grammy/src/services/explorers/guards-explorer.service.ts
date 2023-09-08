@@ -1,21 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { ModuleRef, Reflector } from '@nestjs/core';
-import { Context, NextFunction } from 'grammy';
 
 import { CanActivate, UseGuards } from '@lib/nest-grammy';
 import { UseGuardsOptions } from '@lib/nest-grammy/decorators/guards/use-guards.decorator';
 
 @Injectable()
-export class GuardsService {
+export class GuardsExplorerService {
   constructor(
     private readonly reflector: Reflector,
     private readonly moduleRef: ModuleRef,
   ) {}
 
-  public async getCanActivateFn(
+  public async getGuards(
     controller: unknown,
     action: (...args: unknown[]) => unknown,
-  ): Promise<(ctx: Context, next: NextFunction) => Promise<unknown>> {
+  ): Promise<CanActivate[]> {
     const controllerPrototype = Object.getPrototypeOf(controller);
     if (!controllerPrototype) {
       throw new Error('Controller prototype is undefined');
@@ -25,22 +24,10 @@ export class GuardsService {
       this.reflector.get(UseGuards, controllerPrototype.constructor) || [];
     const actionGuards = this.reflector.get(UseGuards, action) || [];
 
-    const instantiatedGuards = [
+    return [
       ...(await this.instantiateGuards(controllerGuards)),
       ...(await this.instantiateGuards(actionGuards)),
     ];
-
-    return async (ctx: Context, next: NextFunction) => {
-      const canActivate = await Promise.all(
-        instantiatedGuards.map((guard) => guard.canActivate(ctx)),
-      );
-
-      if (canActivate.some((value) => !value)) {
-        throw new UnauthorizedException();
-      }
-
-      await next();
-    };
   }
 
   private async instantiateGuards(guards: UseGuardsOptions) {
@@ -56,8 +43,4 @@ export class GuardsService {
 
     return instances;
   }
-}
-
-export class UnauthorizedException extends Error {
-  name = UnauthorizedException.name;
 }

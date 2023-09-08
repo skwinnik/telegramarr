@@ -6,7 +6,7 @@ import {
   MODULE_OPTIONS_TOKEN,
 } from '@lib/nest-grammy/nest-grammy.module-definition';
 import { BOT_INSTANCE } from '@lib/nest-grammy/providers/bot.provider';
-import { UnauthorizedException } from '@lib/nest-grammy/services/guards.service';
+import { UnauthorizedError } from '@lib/nest-grammy/types/errors';
 
 @Injectable()
 export class ListenerErrorService implements OnModuleInit {
@@ -21,7 +21,7 @@ export class ListenerErrorService implements OnModuleInit {
 
   onModuleInit() {
     this.bot.catch((error: BotError) => {
-      const isUnauthorized = error.error instanceof UnauthorizedException;
+      const isUnauthorized = error.error instanceof UnauthorizedError;
       if (isUnauthorized) {
         this.unauthorizedErrorHandler(error);
         return;

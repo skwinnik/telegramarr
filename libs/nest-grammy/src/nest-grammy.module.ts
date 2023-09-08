@@ -9,20 +9,20 @@ import {
   BOT_INSTANCE,
   BotProvider,
 } from '@lib/nest-grammy/providers/bot.provider';
-import { GuardsService } from '@lib/nest-grammy/services/guards.service';
+import { ExplorerService } from '@lib/nest-grammy/services/explorers/explorer.service';
+import { GuardsExplorerService } from '@lib/nest-grammy/services/explorers/guards-explorer.service';
 import { ListenerErrorService } from '@lib/nest-grammy/services/listener-error.service';
 import { ListenerService } from '@lib/nest-grammy/services/listener.service';
-import { LocatorService } from '@lib/nest-grammy/services/locator.service';
 import { RegisterService } from '@lib/nest-grammy/services/register.service';
 
 @Module({
   imports: [DiscoveryModule],
   providers: [
-    LocatorService,
+    ExplorerService,
+    RegisterService,
     ListenerService,
     ListenerErrorService,
-    RegisterService,
-    GuardsService,
+    GuardsExplorerService,
     {
       inject: [MODULE_OPTIONS_TOKEN],
       provide: BOT_INSTANCE,

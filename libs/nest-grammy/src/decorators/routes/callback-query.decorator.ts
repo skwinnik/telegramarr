@@ -1,5 +1,8 @@
 import { Reflector } from '@nestjs/core';
 
-export const CallbackQuery = Reflector.createDecorator<string | RegExp>({
-  key: 'CALLBACK_QUERY_DECORATOR',
-});
+import { CallbackQueryDecoratorOptions } from '@lib/nest-grammy/decorators/routes/types';
+
+export const CallbackQuery =
+  Reflector.createDecorator<CallbackQueryDecoratorOptions>({
+    key: 'CALLBACK_QUERY_DECORATOR',
+  });

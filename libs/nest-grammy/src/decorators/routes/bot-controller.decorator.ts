@@ -1,5 +1,6 @@
 import { DiscoveryService } from '@nestjs/core';
 
-export const BotController = DiscoveryService.createDecorator<{
-  name: string;
-}>();
+import { BotControllerDecoratorOptions } from '@lib/nest-grammy/decorators/routes/types';
+
+export const BotController =
+  DiscoveryService.createDecorator<BotControllerDecoratorOptions>();
