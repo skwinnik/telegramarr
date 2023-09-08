@@ -1,7 +1,7 @@
 import { Middleware } from 'grammy';
 
 import {
-  BotControllerDecoratorOptions,
+  BotDecoratorOptions,
   CallbackQueryDecoratorOptions,
   CommandDecoratorOptions,
   OnDecoratorOptions,
@@ -9,7 +9,7 @@ import {
 
 export interface IExploredController {
   instance: object;
-  options: BotControllerDecoratorOptions;
+  options: BotDecoratorOptions;
 }
 
 export interface IExploredAction {

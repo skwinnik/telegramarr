@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DiscoveryService, Reflector } from '@nestjs/core';
 import { Middleware } from 'grammy';
 
-import { BotController, CallbackQuery, Command, On } from '@lib/nest-grammy';
+import { Bot, CallbackQuery, Command, On } from '@lib/nest-grammy';
 import {
-  INestGrammyModuleConfig,
-  MODULE_OPTIONS_TOKEN,
-} from '@lib/nest-grammy/nest-grammy.module-definition';
+  INestGrammyConfig,
+  NEST_GRAMMY_CONFIG,
+} from '@lib/nest-grammy/providers/config.provider';
 import { GuardsExplorerService } from '@lib/nest-grammy/services/explorers/guards-explorer.service';
 import {
   IExploredAction,
@@ -20,8 +20,8 @@ import { UnauthorizedError } from '@lib/nest-grammy/types/errors';
 @Injectable()
 export class ExplorerService {
   constructor(
-    @Inject(MODULE_OPTIONS_TOKEN)
-    private readonly config: INestGrammyModuleConfig,
+    @Inject(NEST_GRAMMY_CONFIG)
+    private readonly config: INestGrammyConfig,
     private readonly guardsService: GuardsExplorerService,
     private readonly discoveryService: DiscoveryService,
     private readonly reflector: Reflector,
@@ -110,18 +110,18 @@ export class ExplorerService {
   }
 
   private *getControllers(): Generator<IExploredController> {
-    const botName = this.config.botName;
+    const route = this.config.route;
     const instanceWrappers = this.discoveryService.getProviders({
-      metadataKey: BotController.KEY,
+      metadataKey: Bot.KEY,
     });
 
     for (const wrapper of instanceWrappers) {
       const metadata = this.discoveryService.getMetadataByDecorator(
-        BotController,
+        Bot,
         wrapper,
       );
 
-      if (metadata?.name !== botName || !wrapper.instance) {
+      if (metadata !== route || !wrapper.instance) {
         continue;
       }
 

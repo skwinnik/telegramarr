@@ -13,7 +13,6 @@ import { NestGrammyModule } from '@lib/nest-grammy';
       inject: [APP_CONFIG],
       useFactory: (config: IConfig) => {
         return {
-          botName: 'main',
           token: config.telegram.token,
         };
       },

@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Bot } from 'grammy';
 
-import {
-  INestGrammyModuleConfig,
-  MODULE_OPTIONS_TOKEN,
-} from '@lib/nest-grammy/nest-grammy.module-definition';
 import { BOT_INSTANCE } from '@lib/nest-grammy/providers/bot.provider';
+import {
+  INestGrammyConfig,
+  NEST_GRAMMY_CONFIG,
+} from '@lib/nest-grammy/providers/config.provider';
 import { ExplorerService } from '@lib/nest-grammy/services/explorers/explorer.service';
 import {
   IExploredCallbackQuery,
@@ -17,8 +17,8 @@ import {
 export class RegisterService {
   private readonly logger = new Logger(RegisterService.name);
   constructor(
-    @Inject(MODULE_OPTIONS_TOKEN)
-    private readonly config: INestGrammyModuleConfig,
+    @Inject(NEST_GRAMMY_CONFIG)
+    private readonly config: INestGrammyConfig,
     @Inject(BOT_INSTANCE)
     private readonly bot: Bot,
     private readonly explorerService: ExplorerService,
@@ -52,7 +52,7 @@ export class RegisterService {
       ...command.middlewares,
       command.fn.bind(command.controller.instance),
     );
-    this.logger.log(`@${this.config.botName}: Command: /${command.options}`);
+    this.logger.log(`@${this.config.route}: Command: /${command.options}`);
   }
 
   private registerOn(on: IExploredOn) {
@@ -61,7 +61,7 @@ export class RegisterService {
       ...on.middlewares,
       on.fn.bind(on.controller.instance),
     );
-    this.logger.log(`@${this.config.botName}: On: "${on.options}"`);
+    this.logger.log(`@${this.config.route}: On: "${on.options}"`);
   }
 
   private registerCallbackQuery(callbackQuery: IExploredCallbackQuery) {
@@ -71,7 +71,7 @@ export class RegisterService {
       callbackQuery.fn.bind(callbackQuery.controller.instance),
     );
     this.logger.log(
-      `@${this.config.botName}: CallbackQuery: ${callbackQuery.options}`,
+      `@${this.config.route}: CallbackQuery: ${callbackQuery.options}`,
     );
   }
 
@@ -82,19 +82,17 @@ export class RegisterService {
 
       if (message)
         this.logger.verbose(
-          `@${this.config.botName}: ${message.from.username} sent: ${message.text}`,
+          `@${this.config.route}: ${message.from.username} sent: ${message.text}`,
         );
 
       if (callbackQuery)
         this.logger.verbose(
-          `@${this.config.botName}: ${callbackQuery.from.username} sent callbackQuery: ${callbackQuery.data}`,
+          `@${this.config.route}: ${callbackQuery.from.username} sent callbackQuery: ${callbackQuery.data}`,
         );
 
       return next();
     });
-    this.logger.verbose(
-      `@${this.config.botName}: Verbose middleware registered`,
-    );
+    this.logger.verbose(`@${this.config.route}: Verbose middleware registered`);
   }
 
   private registerCatchAllMiddleware() {
@@ -105,16 +103,16 @@ export class RegisterService {
 
       if (message)
         this.logger.warn(
-          `@${this.config.botName}: No handler for message sent by ${message.from.username}: ${message.text}`,
+          `@${this.config.route}: No handler for message sent by ${message.from.username}: ${message.text}`,
         );
 
       if (callbackQuery)
         this.logger.warn(
-          `@${this.config.botName}: No handler for message sent by ${callbackQuery.from.username}: ${callbackQuery.message}`,
+          `@${this.config.route}: No handler for message sent by ${callbackQuery.from.username}: ${callbackQuery.message}`,
         );
 
       await next();
     });
-    this.logger.log(`@${this.config.botName}: CatchAll middleware registered`);
+    this.logger.log(`@${this.config.route}: CatchAll middleware registered`);
   }
 }

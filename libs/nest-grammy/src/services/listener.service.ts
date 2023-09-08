@@ -1,42 +1,33 @@
-import {
-  Injectable,
-  Inject,
-  OnModuleInit,
-  OnModuleDestroy,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { Bot } from 'grammy';
 
-import {
-  INestGrammyModuleConfig,
-  MODULE_OPTIONS_TOKEN,
-} from '@lib/nest-grammy/nest-grammy.module-definition';
 import { BOT_INSTANCE } from '@lib/nest-grammy/providers/bot.provider';
-import { RegisterService } from '@lib/nest-grammy/services/register.service';
+import {
+  INestGrammyConfig,
+  NEST_GRAMMY_CONFIG,
+} from '@lib/nest-grammy/providers/config.provider';
 
 @Injectable()
-export class ListenerService implements OnModuleInit, OnModuleDestroy {
+export class ListenerService {
   private readonly logger = new Logger(ListenerService.name);
 
   constructor(
-    @Inject(MODULE_OPTIONS_TOKEN)
-    private readonly config: INestGrammyModuleConfig,
+    @Inject(NEST_GRAMMY_CONFIG)
+    private readonly config: INestGrammyConfig,
     @Inject(BOT_INSTANCE)
     private readonly bot: Bot,
-    private readonly registerService: RegisterService,
   ) {}
 
-  async onModuleInit() {
-    await this.registerService.register();
-    this.logger.log(`Bot started: ${this.config.botName}`);
+  public async start() {
+    this.logger.log(`Bot started: ${this.config.route}`);
     this.bot.start().catch((error: Error) => {
       this.logger.error(error.message, error.stack);
     });
   }
 
-  async onModuleDestroy() {
+  public async stop() {
     await this.bot.stop();
 
-    this.logger.log(`Bot stopped: ${this.config.botName}`);
+    this.logger.log(`Bot stopped: ${this.config.route}`);
   }
 }

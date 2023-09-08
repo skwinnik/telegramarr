@@ -1,4 +1,4 @@
-export { BotController } from '@lib/nest-grammy/decorators/routes/bot-controller.decorator';
+export { Bot } from '@lib/nest-grammy/decorators/routes/bot.decorator';
 export { On } from '@lib/nest-grammy/decorators/routes/on.decorator';
 export { CallbackQuery } from '@lib/nest-grammy/decorators/routes/callback-query.decorator';
 export { Command } from '@lib/nest-grammy/decorators/routes/command.decorator';

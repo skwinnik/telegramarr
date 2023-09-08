@@ -7,17 +7,10 @@ import {
   viewMovieResponse,
 } from '@/movie/movie.formatter';
 import { MovieService } from '@/movie/movie.service';
-import {
-  BotController,
-  CallbackQuery,
-  Command,
-  UseGuards,
-} from '@lib/nest-grammy';
+import { Bot, CallbackQuery, Command, UseGuards } from '@lib/nest-grammy';
 import { RadarrValidationError } from '@lib/radarr-client/errors';
 
-@BotController({
-  name: 'main',
-})
+@Bot()
 @UseGuards([UserGuard])
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
