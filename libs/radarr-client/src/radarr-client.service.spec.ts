@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { RadarrClientService } from './radarr-client.service';
+import { RadarrClientService } from '@lib/radarr-client/radarr-client.service';
 
 describe('RadarrClientService', () => {
   let service: RadarrClientService;

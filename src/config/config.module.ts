@@ -5,9 +5,8 @@ import {
 } from '@nestjs/config';
 
 import { ConfigFactory } from '@/config/config.provider';
+import { APP_CONFIG } from '@/config/types';
 import YamlLoader from '@/config/yaml.loader';
-
-import { APP_CONFIG } from './types';
 
 @Global()
 @Module({

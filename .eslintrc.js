@@ -48,5 +48,16 @@ module.exports = {
         },
       },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['../', './'],
+            message: 'Usage of relative imports is not allowed.',
+          },
+        ],
+      },
+    ],
   },
 };

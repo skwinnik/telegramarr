@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 
-import { BotController } from '../decorators/routes/bot-controller.decorator';
+import { BotController } from '@lib/nest-grammy';
 
 @Injectable()
 export class LocatorService {
