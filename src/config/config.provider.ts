@@ -8,6 +8,9 @@ export class ConfigFactory {
 
   public static get(configService: ConfigService): IConfig {
     const config = {
+      logs:
+        configService.get<string>('LOGS')?.split(',') ||
+        configService.get<string[]>('logs'),
       access: {
         allowedUserNames:
           configService.get<string>('ACCESS_ALLOWED_USER_NAMES')?.split(',') ||

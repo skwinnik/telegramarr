@@ -1,4 +1,7 @@
+import { LogLevel } from '@nestjs/common';
+
 export interface IConfig {
+  logs: LogLevel[];
   access: {
     allowedUserNames: string[];
   };
