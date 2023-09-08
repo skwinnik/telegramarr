@@ -4,10 +4,10 @@ import {
   ConfigService,
 } from '@nestjs/config';
 
-import { APP_CONFIG } from './types';
-
 import { ConfigFactory } from '@/config/config.provider';
 import YamlLoader from '@/config/yaml.loader';
+
+import { APP_CONFIG } from './types';
 
 @Global()
 @Module({

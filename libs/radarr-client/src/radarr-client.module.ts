@@ -1,5 +1,6 @@
-import { RadarrClientService } from '@app/radarr-client/radarr-client.service';
 import { Module } from '@nestjs/common';
+
+import { RadarrClientService } from '@lib/radarr-client/radarr-client.service';
 
 import { ConfigurableModuleClass } from './radarr-client.module-definition';
 

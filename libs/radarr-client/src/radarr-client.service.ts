@@ -1,14 +1,14 @@
-import { RadarrErrorFactory } from '@app/radarr-client/errors';
+import { Inject, Injectable } from '@nestjs/common';
+
+import { RadarrErrorFactory } from '@lib/radarr-client/errors';
 import {
   IRadarrClientModuleConfig,
   MODULE_OPTIONS_TOKEN,
-} from '@app/radarr-client/radarr-client.module-definition';
-import { IPostRadarrMovie, IRadarrMovie } from '@app/radarr-client/types';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+} from '@lib/radarr-client/radarr-client.module-definition';
+import { IPostRadarrMovie, IRadarrMovie } from '@lib/radarr-client/types';
 
 @Injectable()
 export class RadarrClientService {
-  private readonly logger = new Logger(RadarrClientService.name);
   constructor(
     @Inject(MODULE_OPTIONS_TOKEN)
     private readonly config: IRadarrClientModuleConfig,
@@ -40,8 +40,7 @@ export class RadarrClientService {
     });
 
     if (!response.ok) {
-      const error = await RadarrErrorFactory.fromResponse(response);
-      throw error;
+      throw await RadarrErrorFactory.fromResponse(response);
     }
 
     return (await response.json()) as Promise<T>;
@@ -58,8 +57,7 @@ export class RadarrClientService {
     });
 
     if (!response.ok) {
-      const error = await RadarrErrorFactory.fromResponse(response);
-      throw error;
+      throw await RadarrErrorFactory.fromResponse(response);
     }
 
     return (await response.json()) as Promise<T>;

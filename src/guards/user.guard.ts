@@ -1,8 +1,8 @@
-import { CanActivate } from '@app/nest-grammy';
 import { Inject } from '@nestjs/common';
 import { Context } from 'grammy';
 
 import { APP_CONFIG, IConfig } from '@/config/types';
+import { CanActivate } from '@lib/nest-grammy';
 
 export class UserGuard implements CanActivate {
   constructor(@Inject(APP_CONFIG) private readonly config: IConfig) {}

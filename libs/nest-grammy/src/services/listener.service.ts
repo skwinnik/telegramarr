@@ -1,10 +1,4 @@
 import {
-  INestGrammyModuleConfig,
-  MODULE_OPTIONS_TOKEN,
-} from '@app/nest-grammy/nest-grammy.module-definition';
-import { BOT_INSTANCE } from '@app/nest-grammy/providers/bot.provider';
-import { RegisterService } from '@app/nest-grammy/services/register.service';
-import {
   Injectable,
   Inject,
   OnModuleInit,
@@ -12,6 +6,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Bot } from 'grammy';
+
+import {
+  INestGrammyModuleConfig,
+  MODULE_OPTIONS_TOKEN,
+} from '@lib/nest-grammy/nest-grammy.module-definition';
+import { BOT_INSTANCE } from '@lib/nest-grammy/providers/bot.provider';
+import { RegisterService } from '@lib/nest-grammy/services/register.service';
 
 @Injectable()
 export class ListenerService implements OnModuleInit, OnModuleDestroy {

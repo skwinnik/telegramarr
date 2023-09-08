@@ -1,11 +1,3 @@
-import {
-  BotController,
-  CallbackQuery,
-  Command,
-  UseGuards,
-} from '@app/nest-grammy';
-import { RadarrValidationError } from '@app/radarr-client/errors';
-import { Logger } from '@nestjs/common';
 import { CallbackQueryContext, CommandContext, Context } from 'grammy';
 
 import { UserGuard } from '@/guards/user.guard';
@@ -15,14 +7,19 @@ import {
   viewMovieResponse,
 } from '@/movie/movie.formatter';
 import { MovieService } from '@/movie/movie.service';
+import {
+  BotController,
+  CallbackQuery,
+  Command,
+  UseGuards,
+} from '@lib/nest-grammy';
+import { RadarrValidationError } from '@lib/radarr-client/errors';
 
 @BotController({
   name: 'main',
 })
 @UseGuards([UserGuard])
 export class MovieController {
-  private readonly logger = new Logger(MovieController.name);
-
   constructor(private readonly movieService: MovieService) {}
 
   @Command('movie')

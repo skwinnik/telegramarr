@@ -1,15 +1,10 @@
-import {
-  IPostRadarrMovie,
-  IRadarrMovie,
-  RadarrClientService,
-} from '@app/radarr-client';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { APP_CONFIG, IConfig } from '@/config/types';
+import { IRadarrMovie, RadarrClientService } from '@lib/radarr-client';
 
 @Injectable()
 export class MovieService {
-  private logger = new Logger(MovieService.name);
   constructor(
     @Inject(APP_CONFIG) private readonly config: IConfig,
     private readonly radarrClientService: RadarrClientService,

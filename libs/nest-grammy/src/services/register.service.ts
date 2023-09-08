@@ -1,19 +1,18 @@
-import { CallbackQuery, Command, On } from '@app/nest-grammy';
-import {
-  INestGrammyModuleConfig,
-  MODULE_OPTIONS_TOKEN,
-} from '@app/nest-grammy/nest-grammy.module-definition';
-import { BOT_INSTANCE } from '@app/nest-grammy/providers/bot.provider';
-import { GuardsService } from '@app/nest-grammy/services/guards.service';
-import { LocatorService } from '@app/nest-grammy/services/locator.service';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Bot } from 'grammy';
 
+import { CallbackQuery, Command, On } from '@lib/nest-grammy';
+import {
+  INestGrammyModuleConfig,
+  MODULE_OPTIONS_TOKEN,
+} from '@lib/nest-grammy/nest-grammy.module-definition';
+import { BOT_INSTANCE } from '@lib/nest-grammy/providers/bot.provider';
+import { GuardsService } from '@lib/nest-grammy/services/guards.service';
+import { LocatorService } from '@lib/nest-grammy/services/locator.service';
+
 @Injectable()
 export class RegisterService {
-  private readonly logger = new Logger(RegisterService.name);
-
   constructor(
     @Inject(MODULE_OPTIONS_TOKEN)
     private readonly config: INestGrammyModuleConfig,

@@ -1,11 +1,12 @@
+import { Injectable, Inject, OnModuleInit, Logger } from '@nestjs/common';
+import { Bot, BotError } from 'grammy';
+
 import {
   INestGrammyModuleConfig,
   MODULE_OPTIONS_TOKEN,
-} from '@app/nest-grammy/nest-grammy.module-definition';
-import { BOT_INSTANCE } from '@app/nest-grammy/providers/bot.provider';
-import { UnauthorizedException } from '@app/nest-grammy/services/guards.service';
-import { Injectable, Inject, OnModuleInit, Logger } from '@nestjs/common';
-import { Bot, BotError } from 'grammy';
+} from '@lib/nest-grammy/nest-grammy.module-definition';
+import { BOT_INSTANCE } from '@lib/nest-grammy/providers/bot.provider';
+import { UnauthorizedException } from '@lib/nest-grammy/services/guards.service';
 
 @Injectable()
 export class ListenerErrorService implements OnModuleInit {

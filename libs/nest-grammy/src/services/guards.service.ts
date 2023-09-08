@@ -1,8 +1,9 @@
-import { CanActivate, UseGuards } from '@app/nest-grammy';
-import { UseGuardsOptions } from '@app/nest-grammy/decorators/guards/use-guards.decorator';
 import { Injectable } from '@nestjs/common';
 import { ModuleRef, Reflector } from '@nestjs/core';
 import { Context, NextFunction } from 'grammy';
+
+import { CanActivate, UseGuards } from '@lib/nest-grammy';
+import { UseGuardsOptions } from '@lib/nest-grammy/decorators/guards/use-guards.decorator';
 
 @Injectable()
 export class GuardsService {

@@ -1,6 +1,7 @@
-import { IRadarrMovie } from '@app/radarr-client';
 import { InlineKeyboardMarkup } from '@grammyjs/types/markup';
 import { ParseMode } from '@grammyjs/types/message';
+
+import { IRadarrMovie } from '@lib/radarr-client';
 
 type TelegramResponse = {
   text: string;

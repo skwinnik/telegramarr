@@ -1,11 +1,11 @@
-import { RadarrClientModule } from '@app/radarr-client';
 import { Module } from '@nestjs/common';
-
-import { MovieController } from './movie.controller';
-import { MovieService } from './movie.service';
 
 import { ConfigModule } from '@/config/config.module';
 import { APP_CONFIG, IConfig } from '@/config/types';
+import { RadarrClientModule } from '@lib/radarr-client';
+
+import { MovieController } from './movie.controller';
+import { MovieService } from './movie.service';
 
 @Module({
   imports: [
