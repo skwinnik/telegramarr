@@ -1,24 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { ConfigModule } from '@/config/config.module';
-import { APP_CONFIG, IConfig } from '@/config/types';
+import { GrammyModule } from '@/grammy.module';
 import { MovieModule } from '@/movie/movie.module';
-import { NestGrammyModule } from '@lib/nest-grammy';
+import { WebhookModule } from '@/webhook/webhook.module';
 
 @Module({
-  imports: [
-    ConfigModule,
-    NestGrammyModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [APP_CONFIG],
-      useFactory: (config: IConfig) => {
-        return {
-          token: config.telegram.token,
-        };
-      },
-    }),
-
-    MovieModule,
-  ],
+  imports: [ConfigModule, GrammyModule, MovieModule, WebhookModule],
 })
 export class AppModule {}

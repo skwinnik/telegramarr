@@ -38,7 +38,7 @@ import { RegisterService } from '@lib/nest-grammy/services/register.service';
       useFactory: BotProvider.get,
     },
   ],
-  exports: [],
+  exports: [BOT_INSTANCE],
 })
 export class NestGrammyModule
   extends ConfigurableModuleClass
