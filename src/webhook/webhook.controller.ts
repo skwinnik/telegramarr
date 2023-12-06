@@ -1,4 +1,4 @@
-import { Controller, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
 import { Bot } from 'grammy';
 
 import { BOT_INSTANCE } from '@lib/nest-grammy';
@@ -7,8 +7,8 @@ import { BOT_INSTANCE } from '@lib/nest-grammy';
 export class WebhookController {
   constructor(@Inject(BOT_INSTANCE) private readonly bot: Bot) {}
 
-  @Post('text/:chatId/:text')
-  async text(@Param('chatId') chatId: string, @Param('text') text: string) {
+  @Post('text/:chatId')
+  async text(@Param('chatId') chatId: string, @Body('text') text: string) {
     await this.bot.api.sendMessage(chatId, text);
   }
 }
